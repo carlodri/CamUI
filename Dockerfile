@@ -8,9 +8,9 @@
 #   docker run --rm -it --privileged \
 #     -p 8080:8080 \
 #     -v /run/udev:/run/udev:ro \
-#     -v camui-gallery:/app/static/gallery \
+#     -v ./data:/app/data \
+#     -e CAMUI_DATA_DIR=/app/data \
 #     camui
-#
 
 FROM debian:bookworm
 
@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
        > /etc/apt/sources.list.d/raspi.list \
     && apt-get update && apt-get install -y --no-install-recommends \
     python3 \
+    python3-pip \
     python3-picamera2 \
     python3-libcamera \
     python3-flask \
@@ -33,20 +34,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy application files
-COPY app.py .
-COPY diagnostics.py .
-COPY camera_controls_db.json .
-COPY camera-module-info.json .
-COPY gpio_map.json .
-COPY camera-last-config.json .
-COPY connected_cameras_config.json .
-COPY templates/ templates/
-COPY static/ static/
+# Copy pyproject.toml first to leverage Docker layer caching
+COPY pyproject.toml .
+COPY src/ src/
 
-# Create gallery directory for captured images
-RUN mkdir -p /app/static/gallery /app/static/camera_profiles
+# Install the camui package (picamera2 already installed via apt above)
+RUN pip3 install --break-system-packages --no-deps .
+
+# Runtime data directory (gallery images, camera profiles, last-config)
+# Mount a volume here for persistence: -v ./data:/app/data
+RUN mkdir -p /app/data/gallery /app/data/camera_profiles
 
 EXPOSE 8080
 
-CMD ["python3", "app.py", "--ip", "0.0.0.0", "--port", "8080"]
+ENV CAMUI_DATA_DIR=/app/data
+
+CMD ["python3", "-m", "camui", "--ip", "0.0.0.0", "--port", "8080"]

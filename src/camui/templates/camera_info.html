@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-xxl">
+    <div class="container" id="custom-cards">
+      {% if camera_data %}
+        
+        <div class="row row-cols-1 row-cols-md-2">
+          <div class="col d-flex flex-column align-items-start flex-column align-items-center">
+            <div class="card mb-3" style="width: 18rem;">
+              <img class="m-1" src="{{ url_for('static', filename='img/' + (camera_data.sensor_model if camera_data.sensor_model else 'unknown') + '.jpg') }}" alt="Camera Image">
+            </div>
+            <h2 class="fw-bold text-body-emphasis">{{ camera_data.module_name }}</h2>
+            <p class="text-body-secondary">
+              {{ camera_data.manufacturer }} {{ camera_data.sensor_model }}
+            </p>
+          </div>
+
+          <div class="col">
+            <div class="row row-cols-1 g-4 m-0">
+                <ul id="myTab" class="nav nav-tabs mt-0">
+                    <li class="nav-item">
+                        <a href="#tech_info" class="nav-link active" data-bs-toggle="tab">Camera Spec</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#url" class="nav-link" data-bs-toggle="tab">Camera Links</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#encoder" class="nav-link" data-bs-toggle="tab">Encoder</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#controls" class="nav-link" data-bs-toggle="tab">Physical Controls</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active table-responsive" id="tech_info">
+                      <table class="table">
+                        <tbody>
+                            <tr><th scope="row">Megapixels</th><td>{{ camera_data.megapixels }}</td></tr>
+                            <tr><th scope="row">Sensor Resolution</th><td>{{ camera_data.sensor_resolution }}</td></tr>
+                            <tr><th scope="row">Video Modes</th><td>{{ camera_data.video_modes }}</td></tr>
+                            <tr><th scope="row">Sensor Image Area</th><td>{{ camera_data.sensor_image_area }}</td></tr>
+                            <tr><th scope="row">Pixel Size</th><td>{{ camera_data.pixel_size }}</td></tr>
+                            <tr><th scope="row">Optical Size</th><td>{{ camera_data.optical_size }}</td></tr>
+                            <tr><th scope="row">Focus</th><td>{{ camera_data.focus }}</td></tr>
+                            <tr><th scope="row">Depth of field</th><td>{{ camera_data.dof }}</td></tr>
+                            <tr><th scope="row">Focal Length</th><td>{{ camera_data.focal_length }}</td></tr>
+                            <tr><th scope="row">Horizontal Field of View (FoV)</th><td>{{ camera_data.horizontal_fov }}</td></tr>
+                            <tr><th scope="row">Vertical Field of View (FoV)</th><td>{{ camera_data.vertical_fov }}</td></tr>
+                            <tr><th scope="row">Focal ratio (F-Stop)</th><td>{{ camera_data.f_stop }}</td></tr>
+                            <tr><th scope="row">Maximum exposure times (seconds)</th><td>{{ camera_data.max_exposure_time }}</td></tr>
+                            <tr><th scope="row">Lens Mount</th><td>{{ camera_data.lens_mount }}</td></tr>
+                            <tr><th scope="row">NoIR version available?</th><td>{{ camera_data.got_noir }}</td></tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="tab-pane fade table-responsive" id="url">
+                      <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Video Feed</th>
+                                <td><a href="{{ url_for('video_feed', camera_num=camera_num) }}" class="user-select-all text-break" id="video_feed_link">{{ full_url }}{{ url_for('video_feed', camera_num=camera_num) }}</a></td>
+              <td><button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-title="Copy to clipboard" onclick="copyToClipboard('video_feed_link')"><i class="bi bi-clipboard"></i></button></td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Snapshot Link</th>
+                              <td><a href="{{ url_for('snapshot', camera_num=camera_num) }}" class="user-select-all text-break" id="snapshot_link">{{ full_url }}{{ url_for('snapshot', camera_num=camera_num) }}</a></td>
+                              <td><button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-title="Copy to clipboard" onclick="copyToClipboard('snapshot_link')"><i class="bi bi-clipboard"></i></button></td>
+    </tr>
+                            <!-- Add more rows for additional properties -->
+                        </tbody>
+                    </table>
+                    <div class="alert alert-info d-flex align-items-center" role="alert">
+                      <i class="bi bi-info-circle mr-2 ml-2"></i>
+                      <div>
+                        &nbsp;These links work in VLC Player, OBS and Octoprint. If the hostname URL does not work it is recommended to use the IP address instead
+                      </div>
+                  </div>
+                    </div>
+
+                </div>
+           </div>
+          </div>
+        </div>
+      {% else %}
+        <p>Error: Camera module data not found</p>
+      {% endif %}
+  </div>
+</div>
+<script>
+  function copyToClipboard(data) {
+           const copyText = document.getElementById(data).href;
+           const tempInput = document.createElement('input');
+           document.body.appendChild(tempInput);
+           tempInput.value = copyText;
+           tempInput.select();
+           document.execCommand('copy');
+           document.body.removeChild(tempInput);
+       };
+</script>
+{% endblock %}

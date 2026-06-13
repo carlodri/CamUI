@@ -1,19 +1,11 @@
 services:
   camui:
     build: .
-    privileged: true
-    network_mode: host
-    ipc: host
-    pid: host
-    command: ["python3", "app.py", "--ip", "0.0.0.0", "--port", "8080"]
-    devices:
-      - /dev:/dev
-    shm_size: "512m"
+    privileged: true                      # Required for /dev/video* camera access
+    network_mode: host                    # Allows LAN access without port mapping
     volumes:
-      - /run/udev:/run/udev:ro
-      - /dev/dma_heap:/dev/dma_heap
-      - camui-gallery:/app/static/gallery
+      - /run/udev:/run/udev:ro            # udev events for camera detection
+      - ./data:/app/data                  # Persist gallery + profiles on the host
+    environment:
+      - CAMUI_DATA_DIR=/app/data          # Tell camui where to store runtime data
     restart: unless-stopped
-
-volumes:
-  camui-gallery:

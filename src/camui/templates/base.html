@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="{{ theme }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project_title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+</head>
+<body> 
+  {% if navbar %}
+  {% include "navbar.html" %}
+  <main class="pt-3" style="margin-top: 66px; margin-bottom: 110px;">
+    {% else %}
+    <main>
+{% endif %}
+  
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+  <script>
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const theme = "{{ theme }}";  // This should be injected from Flask
+    const themeIcon = document.getElementById("theme-icon");
+
+    function updateTheme(theme) {
+        document.documentElement.setAttribute("data-bs-theme", theme);
+        themeIcon.className = theme === "light" ? "bi bi-brightness-high-fill" : "bi bi-moon-stars-fill";
+    }
+
+    updateTheme(theme);  // Apply the correct theme and icon on page load
+
+    window.setTheme = function (newTheme) {
+        updateTheme(newTheme);
+        fetch(`/set_theme/${newTheme}`, { method: "GET", headers: { "Content-Type": "application/json" } })
+            .catch(error => console.error("Error:", error));
+    };
+});
+  </script>
+</body>
+</html>

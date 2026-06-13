@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "camui"
+version = "2.0.0b0"
+description = "Lightweight web interface for Raspberry Pi camera modules, built on picamera2 and Flask"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "James Mitchell" },
+]
+requires-python = ">=3.10"
+dependencies = [
+    "flask>=3.0",
+    "pillow>=10.0",
+]
+
+[project.scripts]
+camui = "camui.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/camui"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src" = ""
+
+# Include data files (JSON databases) bundled with the package
+[tool.hatch.build.targets.wheel.force-include]
+"src/camui/data" = "camui/data"
+"src/camui/static" = "camui/static"
+"src/camui/templates" = "camui/templates"

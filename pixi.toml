@@ -1,0 +1,87 @@
+# CamUI - Pixi Workspace & Package Configuration
+# https://pixi.sh
+#
+# Conda build with pixi-build-python backend (preview feature):
+#   pixi build
+#
+# Publish to a conda-style channel:
+#   pixi publish --target-channel https://prefix.dev/<your-channel>
+#
+# Run dev server:
+#   pixi run dev
+#
+# Run diagnostics:
+#   pixi run diagnostics
+
+####################
+# Workspace
+####################
+
+[workspace]
+name = "camui"
+version = "2.0.0b0"
+description = "Lightweight web interface for Raspberry Pi camera modules, built on picamera2 and Flask"
+authors = ["James Mitchell"]
+channels = ["conda-forge"]
+platforms = ["linux-aarch64", "linux-64"]
+
+# Enable the pixi-build preview feature to allow `pixi build` and `pixi publish`
+preview = ["pixi-build"]
+
+####################
+# Package (Conda build configuration)
+####################
+
+[package]
+name = "camui"
+version = "2.0.0b0"
+
+[package.build]
+# pixi-build-python reads pyproject.toml and wraps hatchling to produce
+# a conda .conda artifact that can be uploaded with `pixi publish`
+backend = { name = "pixi-build-python", version = "0.*" }
+
+[package.host-dependencies]
+# Build-time requirements forwarded from pyproject.toml [build-system.requires]
+hatchling = ">=1.21"
+python = ">=3.10"
+
+[package.run-dependencies]
+python = ">=3.10"
+flask = ">=3.0"
+pillow = ">=10.0"
+picamera2 = ">=0.3.36"
+
+####################
+# Development Environment Dependencies
+####################
+
+[dependencies]
+python = ">=3.10"
+flask = ">=3.0"
+pillow = ">=10.0"
+pip = "*"
+
+# picamera2 is available from conda-forge as of 2026.
+# On a real Raspberry Pi the system apt package may still be preferred.
+picamera2 = ">=0.3.36"
+
+####################
+# Tasks
+####################
+
+[tasks]
+# Start the development server
+dev = "python -m camui --ip 0.0.0.0 --port 8080"
+
+# Start on a specific port
+dev-port = { cmd = "python -m camui --ip 0.0.0.0 --port $PORT", env = { PORT = "8080" } }
+
+# Run the diagnostics utility
+diagnostics = "python -m camui.diagnostics"
+
+# Build the conda package artifact
+build = "pixi build"
+
+# Publish to prefix.dev (set PIXI_CHANNEL env var or pass --target-channel)
+publish = "pixi publish --target-channel https://prefix.dev/camui"
