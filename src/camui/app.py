@@ -285,18 +285,7 @@ def video_feed(camera_num):
     camera = cameras.get(camera_num)
     if not camera:
         abort(404)
-
-    def generate():
-        while True:
-            if camera.capturing_still:
-                frame = camera.placeholder_frame
-            else:
-                with camera.output.condition:
-                    camera.output.condition.wait()
-                frame = camera.output.read_frame()
-            yield (b"--frame\r\nContent-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
-
-    return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
+    return Response(camera.generate_stream(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 @app.route("/toggle_video_feed", methods=["POST"])
@@ -319,7 +308,7 @@ def preview(camera_num):
     camera = cameras.get(camera_num)
     if not camera:
         return jsonify({"error": "Camera not found"}), 404
-    camera.configure_video_config()
+    camera.take_still(camera_num, "preview_image")
     return jsonify({"success": True})
 
 
@@ -374,10 +363,10 @@ def save_profile(camera_num):
     filename = data.get("filename")
     if not filename:
         return jsonify({"error": "Filename required"}), 400
-    profile_path = get_profiles_dir() / filename
-    with open(profile_path, "w") as fh:
-        json.dump(camera.camera_profile, fh, indent=4)
-    return jsonify({"success": True, "filename": filename})
+    success = camera.save_profile(filename)
+    if success:
+        return jsonify({"success": True, "filename": filename})
+    return jsonify({"error": "Failed to save profile"}), 500
 
 
 @app.route("/reset_profile_<int:camera_num>", methods=["POST"])
@@ -385,8 +374,7 @@ def reset_profile(camera_num):
     camera = cameras.get(camera_num)
     if not camera:
         return jsonify({"error": "Camera not found"}), 404
-    camera.camera_profile = camera.generate_camera_profile()
-    camera.initialize_controls_template(camera.picam2.camera_controls)
+    camera.reset_to_default()
     return jsonify({"success": True})
 
 
@@ -395,8 +383,8 @@ def fetch_metadata(camera_num):
     camera = cameras.get(camera_num)
     if not camera:
         return jsonify({"error": "Camera not found"}), 404
-    camera.update_camera_from_metadata()
-    return jsonify(camera.metadata)
+    metadata = camera.capture_metadata()
+    return jsonify(metadata)
 
 
 @app.route("/load_profile", methods=["POST"])
