@@ -66,19 +66,23 @@ pip = "*"
 # On a real Raspberry Pi the system apt package may still be preferred.
 picamera2 = ">=0.3.36"
 
+# Editable install so python -m camui works without PYTHONPATH
+[pypi-dependencies]
+camui = { path = ".", editable = true }
+
 ####################
 # Tasks
 ####################
 
 [tasks]
 # Start the development server
-dev = { cmd = "python -m camui --ip 0.0.0.0 --port 8080", env = { PYTHONPATH = "src" } }
+dev = "python -m camui --ip 0.0.0.0 --port 8080"
 
 # Start on a specific port
-dev-port = { cmd = "python -m camui --ip 0.0.0.0 --port $PORT", env = { PORT = "8080", PYTHONPATH = "src" } }
+dev-port = { cmd = "python -m camui --ip 0.0.0.0 --port $PORT", env = { PORT = "8080" } }
 
 # Run the diagnostics utility
-diagnostics = { cmd = "python -m camui.diagnostics", env = { PYTHONPATH = "src" } }
+diagnostics = "python -m camui.diagnostics"
 
 # Build the conda package artifact
 build = "pixi build"

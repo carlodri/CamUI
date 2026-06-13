@@ -12,8 +12,6 @@ pixi run dev-port        # PORT=9090 pixi run dev-port
 
 # Package entry (after pip install -e . or pixi build)
 #   pip install -e . && python -m camui --ip 0.0.0.0 --port 8080
-# Or manually (same PYTHONPATH that pixi tasks set):
-PYTHONPATH=src python -m camui --ip 0.0.0.0 --port 8080
 ```
 
 ## Hardware requirement
