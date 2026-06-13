@@ -215,7 +215,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-26.2-pyhc364b38_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/picamera2-0.3.36-pyheecf25b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/piexif-1.1.3-py_2.tar.bz2
-      - conda: https://conda.anaconda.org/conda-forge/noarch/pip-26.1.2-pyh145f28c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/py-videodev2-0.0.4-pyh13649a0_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/python-libarchive-c-5.3-pyhe01879c_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/python_abi-3.14-8_cp314.conda
@@ -423,7 +422,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-26.2-pyhc364b38_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/picamera2-0.3.36-pyheecf25b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/piexif-1.1.3-py_2.tar.bz2
-      - conda: https://conda.anaconda.org/conda-forge/noarch/pip-26.1.2-pyh145f28c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/py-videodev2-0.0.4-pyh13649a0_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/python-libarchive-c-5.3-pyhe01879c_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/python_abi-3.14-8_cp314.conda
@@ -5673,17 +5671,6 @@ packages:
   - pkg:pypi/piexif?source=hash-mapping
   size: 20451
   timestamp: 1584030395680
-- conda: https://conda.anaconda.org/conda-forge/noarch/pip-26.1.2-pyh145f28c_0.conda
-  sha256: 9e673d3c6003f416df11670a14b026a04e3a45ebec55357987e15b860f138f2a
-  md5: 733cc07ed34162ac50b936464b163366
-  depends:
-  - python >=3.13.0a0
-  license: MIT
-  license_family: MIT
-  purls:
-  - pkg:pypi/pip?source=compressed-mapping
-  size: 1202377
-  timestamp: 1780262809860
 - conda: https://conda.anaconda.org/conda-forge/noarch/py-videodev2-0.0.4-pyh13649a0_0.conda
   sha256: 30a0216b6f5a8e5c5a6dd3f58647b3d69b804705fdef49fed7e2ffbde5d0832b
   md5: 5422120c52f892068067b1f595abcdeb
