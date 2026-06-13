@@ -1,9 +1,6 @@
-static/gallery/*
-!static/gallery/snapshot/default_preview.svg
 src/camui/static/gallery/*
 !src/camui/static/gallery/snapshot/default_preview.svg
 .venv/*
-static/camera_config/*
 camera-last-config.json
 connected_cameras_config.json
 __pycache__/

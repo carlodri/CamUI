@@ -70,7 +70,7 @@ cd picamera2-WebUI
 ```
 4. Run the application and access the web interface through your browser.
 ```bash
-python app.py
+python -m camui --ip 0.0.0.0 --port 8080
 ```
 5. From your broswer, on a device connected to the same network, goto the following address: 'http://**Your IP**:8080/'
 
@@ -79,7 +79,7 @@ python app.py
 - Run the following command and note down the location for python which python should look like "/usr/bin/python" `which python`
 - Goto the following directory `cd /etc/systemd/system/`
 - Create and edit the following file `sudo nano picamera2-webui.service`
-- Paste this into the file, in the line "ExecStart" the 1st part should be the result of your "which python" command we did at the start (if its the same then its all good) the 2nd path is the location of the cloned repo with the app.py
+- Paste this into the file, in the line "ExecStart" the 1st part should be the result of your "which python" command we did at the start (if its the same then its all good). The `-m camui` flag tells Python to run the installed CamUI package.
   
 ```bash
 [Unit]
@@ -87,7 +87,7 @@ Description=CamUI Server
 After=network.target
 [Service]
 Type=simple
-ExecStart=/usr/bin/python /home/pi/CamUI/app.py
+ExecStart=/usr/bin/python -m camui --ip 0.0.0.0 --port 8080
 Restart=always
 [Install]
 WantedBy=multi-user.target

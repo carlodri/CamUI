@@ -185,8 +185,12 @@ class CameraObject:
             return False
 
     def generate_camera_profile(self):
-        profile_path = get_profiles_dir() / "camera-module-info.json"
-        if not self.camera_info.get("Has_Config", False) or not profile_path.exists():
+        config_location = self.camera_info.get("Config_Location", "")
+        profile_path = get_profiles_dir() / config_location if config_location else None
+        if self.camera_info.get("Has_Config", False) and profile_path and profile_path.exists():
+            with open(profile_path, "r") as f:
+                self.camera_profile = json.load(f)
+        else:
             self.camera_profile = {
                 "hflip": 0,
                 "vflip": 0,
@@ -197,9 +201,6 @@ class CameraObject:
                 "saveRAW": False,
                 "controls": {},
             }
-        else:
-            with open(profile_path, "r") as f:
-                self.camera_profile = json.load(f)
         return self.camera_profile
 
     def initialize_controls_template(self, picamera2_controls):

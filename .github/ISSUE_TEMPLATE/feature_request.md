@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **If your request is for a new camera support**
-Please run the file diagnostics.py on your setup with the camera in question connected and paste the results in this request
+Please run `python -m camui.diagnostics` on your setup with the camera in question connected and paste the results in this request
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
