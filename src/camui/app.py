@@ -391,7 +391,7 @@ def fetch_metadata(camera_num):
 def load_profile():
     data = request.get_json()
     camera_num = data.get("camera_num")
-    filename = data.get("filename")
+    filename = data.get("profile_name")
     camera = cameras.get(camera_num)
     if not camera:
         return jsonify({"error": "Camera not found"}), 404
@@ -458,11 +458,17 @@ def image_gallery():
         return render_template("error.html", message="Gallery not initialized"), 500
     page = request.args.get("page", 1, type=int)
     images, total_pages = image_gallery_manager.paginate_images(page)
+    if not images:
+        return render_template("no_files.html")
+    start_page = max(1, page - 2)
+    end_page = min(total_pages, page + 2)
     return render_template(
         "image_gallery.html",
-        images=images,
+        image_files=images,
         page=page,
         total_pages=total_pages,
+        start_page=start_page,
+        end_page=end_page,
         active_page="gallery",
     )
 
@@ -473,7 +479,15 @@ def get_image_for_page():
         return jsonify([])
     page = request.args.get("page", 1, type=int)
     images, total_pages = image_gallery_manager.paginate_images(page)
-    return jsonify({"images": images, "total_pages": total_pages})
+    start_page = max(1, page - 2)
+    end_page = min(total_pages, page + 2)
+    return jsonify({
+        "image_files": images,
+        "page": page,
+        "total_pages": total_pages,
+        "start_page": start_page,
+        "end_page": end_page,
+    })
 
 
 @app.route("/view_image/<filename>")
