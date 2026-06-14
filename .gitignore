@@ -1,11 +1,12 @@
 src/camui/static/gallery/*
 !src/camui/static/gallery/snapshot/default_preview.svg
-.venv/*
 camera-last-config.json
 connected_cameras_config.json
-__pycache__/
-*.pyc
-.Pixi/
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode
