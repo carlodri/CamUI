@@ -7,6 +7,7 @@ Usage:
 """
 
 import json
+import logging
 
 from picamera2 import Picamera2
 
@@ -17,7 +18,7 @@ def print_section(title: str):
 
 def inspect_camera(camera: dict):
     """Print full diagnostics for one connected camera."""
-    Picamera2.set_logging(Picamera2.DEBUG)
+    Picamera2.set_logging(logging.DEBUG)
     picam2 = Picamera2(camera["Num"])
     try:
         print_section("Camera Info")
@@ -58,7 +59,7 @@ def inspect_camera(camera: dict):
 
 
 def main():
-    Picamera2.set_logging(Picamera2.WARNING)
+    Picamera2.set_logging(logging.WARNING)
     global_cameras = Picamera2.global_camera_info()
     if not global_cameras:
         print("No cameras detected.")

@@ -201,4 +201,7 @@ pyrightconfig.json
 .history
 .ionide
 
+# picamera2 manual PDF (user-placed reference copy)
+RP-008156-DS-2-picamera2-manual.pdf
+
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode

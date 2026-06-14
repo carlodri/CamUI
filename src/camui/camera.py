@@ -632,8 +632,8 @@ class CameraObject:
     def take_still_from_feed(self, camera_num, image_name):
         try:
             filepath = get_gallery_dir() / image_name
-            request = self.picam2.capture_request()
-            request.save("main", f"{filepath}.jpg")
+            with self.picam2.captured_request() as request:
+                request.save("main", f"{filepath}.jpg")
             print(f"Image captured successfully. Path: {filepath}")
             return f"{filepath}.jpg"
         except Exception as e:

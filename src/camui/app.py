@@ -99,7 +99,7 @@ def initialize():
     camera_module_info = load_camera_module_info()
     camera_last_config = load_or_initialize_config(get_last_config_path(), MINIMUM_LAST_CONFIG)
 
-    Picamera2.set_logging(Picamera2.DEBUG)
+    Picamera2.set_logging(logging.DEBUG)
     global_cameras = Picamera2.global_camera_info()
 
     currently_connected_cameras = _build_camera_config(global_cameras, camera_module_info, camera_last_config)
