@@ -22,3 +22,13 @@ camui = { path = ".", editable = true }
 dev = "python -m camui --ip 0.0.0.0 --port 8080"
 dev-port = { cmd = "python -m camui --ip 0.0.0.0 --port $PORT", env = { PORT = "8080" } }
 diagnostics = "python -m camui.diagnostics"
+
+[feature.dev.tasks]
+ty-check = "ty check src/camui/"
+
+[feature.dev.dependencies]
+ty = "*"
+
+[environments]
+default = []
+dev = { features = ["dev"], solve-group = "default" }
