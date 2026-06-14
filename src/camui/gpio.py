@@ -7,6 +7,7 @@ GPIO hardware control is a planned feature and currently unused in the UI.
 
 import json
 import logging
+from typing import Any
 
 from camui.config import load_gpio_map
 
@@ -14,10 +15,10 @@ from camui.config import load_gpio_map
 class GPIO:
     """Loads and exposes GPIO pin configuration from the bundled gpio_map.json."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.gpio_pins = self._load_config()
 
-    def _load_config(self) -> list[dict]:
+    def _load_config(self) -> list[dict[str, Any]]:
         try:
             data = load_gpio_map()
             if not isinstance(data, dict) or "gpio_template" not in data:
@@ -30,6 +31,6 @@ class GPIO:
             logging.error(f"Error loading GPIO config: {exc}")
             return []
 
-    def get_gpio_pins(self) -> list[dict]:
+    def get_gpio_pins(self) -> list[dict[str, Any]]:
         """Return the GPIO pin configuration list."""
         return self.gpio_pins

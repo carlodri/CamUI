@@ -20,19 +20,21 @@ import importlib.resources as pkg_resources
 import json
 import os
 from pathlib import Path
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Package version / metadata
 # ---------------------------------------------------------------------------
 from camui import __version__, __title__
 
-version = __version__
-project_title = __title__
-firmware_control = False
+version: str = __version__
+project_title: str = __title__
+firmware_control: bool = False
 
 # ---------------------------------------------------------------------------
 # Runtime data directory  (read-write: gallery, profiles, last-config)
 # ---------------------------------------------------------------------------
+
 
 def get_data_dir() -> Path:
     """Return the runtime data directory, creating it if necessary."""
@@ -62,16 +64,17 @@ def get_last_config_path() -> Path:
 
 
 # Items per page in the gallery
-ITEMS_PER_PAGE = 12
+ITEMS_PER_PAGE: int = 12
 
 # Minimum camera-last-config structure
-MINIMUM_LAST_CONFIG = {"cameras": []}
+MINIMUM_LAST_CONFIG: dict[str, Any] = {"cameras": []}
 
 # ---------------------------------------------------------------------------
 # Static package data  (read-only databases shipped with the package)
 # ---------------------------------------------------------------------------
 
-def _load_package_json(filename: str) -> dict:
+
+def _load_package_json(filename: str) -> dict[str, Any]:
     """Load a JSON file bundled inside camui/data/."""
     # importlib.resources works for both installed wheels and editable installs
     try:
@@ -85,15 +88,15 @@ def _load_package_json(filename: str) -> dict:
             return json.load(fh)
 
 
-def load_camera_module_info() -> dict:
+def load_camera_module_info() -> dict[str, Any]:
     return _load_package_json("camera-module-info.json")
 
 
-def load_camera_controls_db() -> dict:
+def load_camera_controls_db() -> dict[str, Any]:
     return _load_package_json("camera_controls_db.json")
 
 
-def load_gpio_map() -> dict:
+def load_gpio_map() -> dict[str, Any]:
     return _load_package_json("gpio_map.json")
 
 
@@ -101,7 +104,8 @@ def load_gpio_map() -> dict:
 # Dynamic config helpers
 # ---------------------------------------------------------------------------
 
-def load_or_initialize_config(file_path: Path, default_config: dict) -> dict:
+
+def load_or_initialize_config(file_path: Path, default_config: dict[str, Any]) -> dict[str, Any]:
     """Load JSON config from *file_path*, creating it from *default_config* if absent/invalid."""
     if file_path.exists():
         try:
@@ -118,9 +122,9 @@ def load_or_initialize_config(file_path: Path, default_config: dict) -> dict:
     return dict(default_config)
 
 
-def list_profiles() -> list:
+def list_profiles() -> list[dict[str, str]]:
     """Return a list of {filename, model} dicts for every .json profile saved."""
-    profiles = []
+    profiles: list[dict[str, str]] = []
     profiles_dir = get_profiles_dir()
     for filename in profiles_dir.iterdir():
         if filename.suffix == ".json":
@@ -136,9 +140,9 @@ def list_profiles() -> list:
     return profiles
 
 
-def get_camera_info(camera_model: str, camera_module_info: dict) -> dict:
+def get_camera_info(camera_model: str, camera_module_info: dict[str, Any]) -> dict[str, Any]:
     """Return the module spec for *camera_model*, falling back to 'Unknown'."""
-    modules = camera_module_info.get("camera_modules", [])
+    modules: list[dict[str, Any]] = camera_module_info.get("camera_modules", [])
     return next(
         (m for m in modules if m["sensor_model"] == camera_model),
         next((m for m in modules if m["sensor_model"] == "Unknown"), {}),

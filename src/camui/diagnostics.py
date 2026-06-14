@@ -8,15 +8,16 @@ Usage:
 
 import json
 import logging
+from typing import Any
 
 from picamera2 import Picamera2
 
 
-def print_section(title: str):
+def print_section(title: str) -> None:
     print(f"\n{'=' * 10} {title} {'=' * 10}")
 
 
-def inspect_camera(camera: dict):
+def inspect_camera(camera: Any) -> None:
     """Print full diagnostics for one connected camera."""
     Picamera2.set_logging(logging.DEBUG)
     picam2 = Picamera2(camera["Num"])
@@ -33,7 +34,7 @@ def inspect_camera(camera: dict):
             print(f"⚠️  Could not get sensor modes: {exc}")
 
         print_section("Camera Controls (Defaults)")
-        controls = {}
+        controls: dict[str, Any] = {}
         try:
             controls = picam2.camera_controls
             for control, data in controls.items():
@@ -58,7 +59,7 @@ def inspect_camera(camera: dict):
         picam2.close()
 
 
-def main():
+def main() -> None:
     Picamera2.set_logging(logging.WARNING)
     global_cameras = Picamera2.global_camera_info()
     if not global_cameras:

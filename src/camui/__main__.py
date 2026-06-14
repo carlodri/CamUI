@@ -4,7 +4,7 @@ import argparse
 from camui.app import app, initialize
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="CamUI for PiCamera2")
     parser.add_argument("--port", type=int, default=8080, help="Port to listen on (default: 8080)")
     parser.add_argument("--ip", type=str, default="0.0.0.0", help="IP address to bind to (default: 0.0.0.0)")
